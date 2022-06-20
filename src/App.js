@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const list = [
+const stories = [
     {
         title: 'React',
         url: 'https://reaactjs.org/',
@@ -20,47 +20,63 @@ const list = [
 ];
 
 const App = () => {
+    const [searchTerm, setSearchTerm] = React.useState('');
+
+    const handleSearch = (event) => {
+      setSearchTerm(event.target.value);
+    }
+
+    const searchedStories = stories.filter( story => 
+        story.title.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+
   return (
       <div>
           <h1>My Hacker Stories</h1>
-          <Search />
+          <Search onSearch={handleSearch} />
 
           <hr />
-          <List />
+          <List list={searchedStories} />
       </div>
   );
 }
 
-const Search = () => {
-    const handleChange = (event) => {
-        console.log(event)
-    }
+const Search = ( { onSearch } ) => {
 
     return (
         <div>
             <label htmlFor="search">Search: </label>
-            <input id="search" type="text" onChange={handleChange} />
+            <input id="search"
+                type="text"
+                onChange={onSearch}
+            />
+
+
         </div>
     );
 }
 
-const List = () => {
+const List = ( {list} ) => {
     return (
           <ul>
               {list.map( (item) =>  {   
-                  return(
-                      <li key={item.objectID}>
-                          <span>
-                              <a href={item.url}>{item.title}</a>
-                          </span>
-                          <span>{item.author}</span>
-                          <span>{item.num_comments}</span>
-                          <span>{item.points}</span>
-                      </li>
-                  )
+                  return <Item key={item.objectID} item={item} />
               })}
           </ul>
     );
+}
+
+const Item = ( {item} ) => {
+      return(
+          <li key={item.objectID}>
+              <span>
+                  <a href={item.url}>{item.title}</a>
+              </span>
+              <span>{item.author}</span>
+              <span>{item.num_comments}</span>
+              <span>{item.points}</span>
+          </li>
+      )
 }
 
 export default App;
