@@ -3,9 +3,9 @@ import * as React from 'react';
 const stories = [
     {
         title: 'React',
-        url: 'https://reaactjs.org/',
+        url: 'https://reactjs.org/',
         author: 'Jordan Walke',
-        num_acomments: 3,
+        num_comments: 3,
         points: 4,
         objectID: 0,
     },
@@ -33,7 +33,7 @@ const App = () => {
   return (
       <div>
           <h1>My Hacker Stories</h1>
-          <Search onSearch={handleSearch} />
+          <Search search={searchTerm} onSearch={handleSearch} />
 
           <hr />
           <List list={searchedStories} />
@@ -41,13 +41,14 @@ const App = () => {
   );
 }
 
-const Search = ( { onSearch } ) => {
+const Search = ( { search, onSearch } ) => {
 
     return (
         <div>
             <label htmlFor="search">Search: </label>
             <input id="search"
                 type="text"
+                value={search}
                 onChange={onSearch}
             />
 
@@ -59,22 +60,22 @@ const Search = ( { onSearch } ) => {
 const List = ( {list} ) => {
     return (
           <ul>
-              {list.map( (item) =>  {   
-                  return <Item key={item.objectID} item={item} />
+              {list.map( ({ objectID, ...item }) =>  {   
+                  return <Item key={objectID} {...item} />
               })}
           </ul>
     );
 }
 
-const Item = ( {item} ) => {
+const Item = ( { title, url, author, num_comments, points } ) => {
       return(
-          <li key={item.objectID}>
+          <li>
               <span>
-                  <a href={item.url}>{item.title}</a>
+                  <a href={url}>{title}</a>
               </span>
-              <span>{item.author}</span>
-              <span>{item.num_comments}</span>
-              <span>{item.points}</span>
+              <span>{author}</span>
+              <span>{num_comments}</span>
+              <span>{points}</span>
           </li>
       )
 }
